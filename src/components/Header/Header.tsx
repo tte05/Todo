@@ -1,21 +1,32 @@
-import { NavLink } from "react-router-dom";
-import classes from "./Header.module.scss";
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	HeaderContainer,
+	StyledHeader,
+	StyledNavLink,
+	ThemeToggleButton,
+} from './Header.styled';
+import { toggleThemeAction } from '../../feature/themeList';
+import { RootState } from '../../store';
 
 export const Header = () => {
-  const getActiveClass = ({ isActive }: { isActive: boolean }): string => {
-    return isActive ? `${classes.active} ${classes.link}` : classes.link;
-  };
+	const dispatch = useDispatch();
+	const themeName = useSelector(
+		(state: RootState) => state.themeList.theme.name
+	);
 
-  return (
-    <header className={classes.header}>
-      <div className={classes.container}>
-        <NavLink to="/" className={getActiveClass}>
-          Home
-        </NavLink>
-        <NavLink to="/todo" className={getActiveClass}>
-          ToDo
-        </NavLink>
-      </div>
-    </header>
-  );
+	return (
+		<StyledHeader>
+			<HeaderContainer>
+				<StyledNavLink to='/'>ToDo</StyledNavLink>
+				<StyledNavLink to='/list'>List</StyledNavLink>
+				<div>
+					<ThemeToggleButton
+						onClick={() => dispatch(toggleThemeAction())}
+					>
+						{themeName === 'light' ? '🌙' : '🌞'}
+					</ThemeToggleButton>
+				</div>
+			</HeaderContainer>
+		</StyledHeader>
+	);
 };
